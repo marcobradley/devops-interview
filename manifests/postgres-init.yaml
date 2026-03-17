@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-page-views-table
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-table
+          image: postgres:16
+          env:
+            - name: PGPASSWORD
+              value: tagup
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -euo pipefail
+              for i in $(seq 1 60); do
+                if pg_isready --host=postgres --username=tagup --dbname=postgres; then
+                  break
+                fi
+                echo "Waiting for Postgres..."
+                sleep 2
+              done
+              pg_isready --host=postgres --username=tagup --dbname=postgres
+              psql \
+                --host=postgres \
+                --username=tagup \
+                --dbname=postgres \
+                --command="CREATE TABLE IF NOT EXISTS page_views (id BIGSERIAL PRIMARY KEY, time TIMESTAMPTZ NOT NULL, count INTEGER NOT NULL);"

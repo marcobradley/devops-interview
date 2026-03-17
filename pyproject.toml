@@ -1,0 +1,21 @@
+[project]
+name = "interview"
+version = "0.1.0"
+description = "FastAPI app with Celery, Redis, and PostgreSQL"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "celery",
+    "fastapi",
+    "psycopg[binary]",
+    "redis",
+    "sqlalchemy",
+    "uvicorn[standard]",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/interview"]
