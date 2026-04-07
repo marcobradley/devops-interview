@@ -25,10 +25,10 @@ spec:
           - name: POSTGRES_PASSWORD
             value: "{{ .Values.postgres.pw }}"
           - name: DATABASE_URI
-            value: "postgresql://{{ .Values.postgres.user }}:{{ .Values.postgres.pw }}@postgres:{{ .Values.postgres.port }}/postgres"
+            value: "postgresql+psycopg://{{ .Values.postgres.user }}:{{ .Values.postgres.pw }}@postgres:{{ .Values.postgres.port }}/postgres"
           - name: REDIS_URI
             value: "redis://redis:{{ .Values.redis.port }}/0"
-          - name: RABBITMQ_URI
+          - name: CELERY_BROKER_URL
             value: "amqp://{{ .Values.rabbitmq.user }}:{{ .Values.rabbitmq.pw }}@rabbitmq:{{ .Values.rabbitmq.queue_port }}/"
         ports:
         - containerPort: !!int "{{ .Values.celery.container_port }}"

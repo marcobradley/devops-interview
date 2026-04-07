@@ -2,6 +2,8 @@ api:
   name: "api"
   frontend_port: 5002
   container_port: 5000
+  aggregate_queue: "default"
+  inference_queue: "default"
 celery:
   name: "celery"
   frontend_port: 5001
