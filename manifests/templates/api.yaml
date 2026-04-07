@@ -28,7 +28,7 @@ spec:
           - name: AGGREGATE_QUEUE
             value: "{{ .Values.api.aggregate_queue }}"
           - name: INCREMENT_QUEUE
-            value: "{{ .Values.api.inference_queue }}"
+            value: "{{ .Values.api.increment_queue }}"
           - name: DATABASE_URI
             value: "postgresql+psycopg://{{ .Values.postgres.user }}:{{ .Values.postgres.pw }}@postgres:{{ .Values.postgres.port }}/postgres"
           - name: REDIS_URI
