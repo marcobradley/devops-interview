@@ -15,14 +15,17 @@ spec:
       containers:
       - image: "ghcr.io/tagup/devops-interview:latest"
         name: "{{ .Values.celery.name }}"
+        env:
+          - name: RABBITMQ_URI
+            value: "amqp://{{ .Values.rabbitmq.user }}:{{ .Values.rabbitmq.pw }}@rabbitmq:{{ .Values.rabbitmq.queue_port }}/"
         ports:
         - containerPort: !!int "{{ .Values.celery.container_port }}"
         resources:
           requests:
-            memory: "64Mi"
+            memory: "200Mi"
             cpu: "50m"
           limits:
-            memory: "64Mi"
+            memory: "200Mi"
             cpu: "100m"
 ---
 apiVersion: v1

@@ -20,15 +20,21 @@ spec:
         - containerPort: !!int "{{ .Values.api.container_port }}"
         env:
           - name: POSTGRES_USER
-            value: tagup
+            value: {{ .Values.postgres.user }}
           - name: POSTGRES_PASSWORD
-            value: tagup
+            value: {{ .Values.postgres.password }}
+          - name: DATABASE_URI
+            value: "postgresql://{{ .Values.postgres.user }}:{{ .Values.postgres.password }}@postgres:{{ .Values.postgres.port }}/{{ .Values.postgres.db }}"
+          - name: REDIS_URI
+            value: "redis://redis:{{ .Values.redis.port }}/0"
+          - name: RABBITMQ_URI
+            value: "amqp://{{ .Values.rabbitmq.user }}:{{ .Values.rabbitmq.pw }}@rabbitmq:{{ .Values.rabbitmq.queue_port }}/"
         resources:
           requests:
-            memory: "64Mi"
+            memory: "200Mi"
             cpu: "50m"
           limits:
-            memory: "64Mi"
+            memory: "200Mi"
             cpu: "100m"
 ---
 apiVersion: v1
