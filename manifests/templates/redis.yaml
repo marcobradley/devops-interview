@@ -16,7 +16,7 @@ spec:
         - name: redis
           image: redis:7
           ports:
-            - containerPort: 6379
+            - containerPort: !!int "{{ .Values.redis.port }}"
 ---
 apiVersion: v1
 kind: Service
@@ -26,5 +26,5 @@ spec:
   selector:
     app: redis
   ports:
-    - port: 6379
-      targetPort: 6379
+    - port: !!int "{{ .Values.redis.port }}"
+      targetPort: !!int "{{ .Values.redis.port }}"

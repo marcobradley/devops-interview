@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.api.name }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.api.name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.api.name }}"
+    spec:
+      containers:
+      - image: "ghcr.io/tagup/devops-interview:latest"
+        name: "{{ .Values.api.name }}"
+        ports:
+        - containerPort: !!int "{{ .Values.api.container_port }}"
+        env:
+          - name: POSTGRES_USER
+            value: tagup
+          - name: POSTGRES_PASSWORD
+            value: tagup
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.api.name }}-service"
+spec:
+  ports:
+  - name: http
+    port: !!int "{{ .Values.api.frontend_port }}"
+    protocol: TCP
+    targetPort: !!int "{{ .Values.api.container_port }}"
+  selector:
+    app: "{{ .Values.api.name }}"
+status:
+  loadBalancer: {}

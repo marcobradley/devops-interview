@@ -11,20 +11,20 @@ spec:
           image: postgres:16
           env:
             - name: PGPASSWORD
-              value: tagup
+              value: "{{ .Values.postgres.pw }}"
           command:
             - /bin/sh
             - -c
             - |
               set -euo pipefail
               for i in $(seq 1 60); do
-                if pg_isready --host=postgres --username=tagup --dbname=postgres; then
+                if pg_isready --host=postgres --username="{{ .Values.postgres.user }}" --dbname=postgres; then
                   break
                 fi
                 echo "Waiting for Postgres..."
                 sleep 2
               done
-              pg_isready --host=postgres --username=tagup --dbname=postgres
+              pg_isready --host=postgres --username="{{ .Values.postgres.user }}" --dbname=postgres
               psql \
                 --host=postgres \
                 --username=tagup \

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.celery.name }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.celery.name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.celery.name }}"
+    spec:
+      containers:
+      - image: "ghcr.io/tagup/devops-interview:latest"
+        name: "{{ .Values.celery.name }}"
+        ports:
+        - containerPort: !!int "{{ .Values.celery.container_port }}"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.celery.name }}-service"
+spec:
+  ports:
+  - name: http
+    port: !!int "{{ .Values.celery.frontend_port }}"
+    protocol: TCP
+    targetPort: !!int "{{ .Values.celery.container_port }}"
+  selector:
+    app: "{{ .Values.celery.name }}"
+status:
+  loadBalancer: {}

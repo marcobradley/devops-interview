@@ -17,12 +17,12 @@ spec:
           image: rabbitmq:3
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: tagup
+              value: "{{ .Values.rabbitmq.user }}"
             - name: RABBITMQ_DEFAULT_PASS
-              value: tagup
+              value: "{{ .Values.rabbitmq.pw }}"
           ports:
-            - containerPort: 5672
-            - containerPort: 15672
+            - containerPort: !!int "{{ .Values.rabbitmq.queue_port }}"
+            - containerPort: !!int "{{ .Values.rabbitmq.mgmt_port }}"
 ---
 apiVersion: v1
 kind: Service
@@ -33,8 +33,8 @@ spec:
     app: rabbitmq
   ports:
     - name: amqp
-      port: 5672
-      targetPort: 5672
+      port: !!int "{{ .Values.rabbitmq.queue_port }}"
+      targetPort: !!int "{{ .Values.rabbitmq.queue_port }}"
     - name: management
-      port: 15672
-      targetPort: 15672
+      port: !!int "{{ .Values.rabbitmq.mgmt_port }}"
+      targetPort: !!int "{{ .Values.rabbitmq.mgmt_port }}"

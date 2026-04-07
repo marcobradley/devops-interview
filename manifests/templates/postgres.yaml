@@ -17,11 +17,11 @@ spec:
           image: postgres:16
           env:
             - name: POSTGRES_USER
-              value: tagup
+              value: "{{ .Values.postgres.user }}"
             - name: POSTGRES_PASSWORD
-              value: tagup
+              value: "{{ .Values.postgres.pw }}"
           ports:
-            - containerPort: 5432
+            - containerPort: !!int "{{ .Values.postgres.port }}"
 ---
 apiVersion: v1
 kind: Service
@@ -31,5 +31,5 @@ spec:
   selector:
     app: postgres
   ports:
-    - port: 5432
-      targetPort: 5432
+    - port: !!int "{{ .Values.postgres.port }}"
+      targetPort: !!int "{{ .Values.postgres.port }}"
